@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Student | Dashboard</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <style>
+        .navigation ul{
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #4B0082;
+        }
+        .wrapper .sidebar{
+            width: 110px;
+            height: 100%;
+            background: #4B0082;
+            padding: 30px 0px;
+            position: fixed;
+        }
+        th{
+            background-color:#4B0082;
+            height: 45px;
+            width: 300px;
+            color:white;
+            text-align: center;
+            vertical-align: middle;
+        }
+        a{
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="navigation">
+    <ul>
+        <li><a href="/dashboard">Student Dashboard</a> </li>
+        <li style="float:right"><a href="/portal">Logout</a></li>
+        <li style="float: right;color: white;font-size: 25px;"><h6>Hi <br>{{.}}</h6></li>
+    </ul>
+</div>
+<div class="wrapper">
+    <div class="sidebar">
+        <ul>
+            <li><a href="/staff-home">Home</a></li>
+            <li><a href="/grades">Grades</a></li>
+            <li><a href="/attendance">Attendance</a></li>
+        </ul>
+    </div>
+</div>
+<div class="dashboardSection">
+    <div class="dashboard">
+        <div class="input-group rounded" style="width:20%;float: right;margin-top: 30px;margin-right: 20px;">
+            <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                   aria-describedby="search-addon" />
+            <span class="input-group-text border-0" id="search-addon">
+    <i class="fas fa-search"></i>
+  </span>
+        </div><br><br><br>
+        <h1 style="margin-left: 50px;">Hi,Champion!</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <h2 style="margin-left: 150px;
+    margin-right: 800px;width:30%;">Upcoming classes</h2>
+        <div class="danger" style="width:40%;">
+            <p><strong>Networks</strong></p>
+        </div>
+
+        <div class="success" style="width:40%;">
+            <p><strong>Operating System</strong></p>
+        </div>
+
+        <div class="info" style="width:40%;">
+            <p><strong>Discrete Mathematics</strong> </p>
+        </div>
+
+        <div class="warning" style="width:40%;">
+            <p><strong>English</strong></p>
+        </div>
+    </div>
+    <div class="col">
+    </div>
+</div>
+<div class="row">
+    <div class="col" style="margin-left: 200px;">
+        <div id="piechart"></div>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
+                var data = google.visualization.arrayToDataTable([
+                    ['Study', 'Hours per Day'],
+                    ['English', 8],
+                    ['Maths', 2],
+                    ['CN', 4],
+                    ['CoA', 2],
+                    ['OS', 8]
+                ]);
+                var options = {'title':'Study Hours', 'width':450, 'height':400};
+                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                chart.draw(data, options);
+            }
+        </script>
+    </div>
+    <div class="column">
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
+

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link href="./css/styles.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function register_form()
+        {
+            var requestObject = {};
+            requestObject.firstname=$("#firstname").val();
+            requestObject.lastname=$("#lastname").val();
+            requestObject.email=$("#email").val();
+            requestObject.password=$("#password").val();
+            requestObject.rpassword=$("#rpassword").val();
+            var s=document.getElementById("usertype");
+            requestObject.usertype=s.options[s.selectedIndex].value;
+            var regex=/^[A-Za-z0-9]+$/;
+
+            if(requestObject.rpassword!=requestObject.password){
+                alert("Repeat Password is not match.")
+                return false;
+            }
+            var isvalid=regex.test(requestObject.firstname);
+            if(!isvalid){
+                alert("First name Contains special character");
+            }
+            var isvalidl=regex.test(requestObject.lastname);
+            if(!isvalidl){
+                alert("Last name Contains special character");
+            }
+           $.ajax({
+               method: "POST",
+               url: "/user",
+               data: JSON.stringify(requestObject),
+               success:function(data) {
+                   console.log("Registered : ")
+                   console.log(data)
+                   window.alert("Registered : " + data)
+
+               }
+           });
+            location.reload();
+        }
+    </script>
+</head>
+<body>
+<div class="signupSection">
+    <form method="POST" class="signupForm" name="signupform">
+        <h2>Registration</h2><br>
+        <ul class="noBullet">
+            <li>
+                <label for="firstname"></label>
+                <input type="text" class="inputFields" id="firstname" name="firstname" placeholder="First Name" value="" required/>
+            </li>
+            <li>
+                <label for="lastname"></label>
+                <input type="text" class="inputFields" id="lastname" name="lastname" placeholder="Last name" value="" required/>
+            </li>
+            <li>
+                <label for="email"></label>
+                <input type="text" class="inputFields" id="email" name="email" placeholder="Email" value="" required/>
+            </li>
+            <li>
+                <label for="password"></label>
+                <input type="password" class="inputFields" id="password" name="password" placeholder="Password" value="" required/>
+            </li>
+            <li>
+                <label for="rpassword"></label>
+                <input type="password" class="inputFields" id="rpassword" name="rpassword" placeholder="Repeat Password" value="" required/>
+            </li><br>
+            <li>
+                    <select for="usertype" name="usertype" id="usertype">
+                        <option value="" selected disabled>User Type</option>
+                        <option value="student">Student</option>
+                        <option value="staff">Staff</option>
+                        <option value="admin">Admin</option>
+                    </select>
+            </li>
+            <li id="center-btn">
+                <button id="join-btn" type="button" onclick="register_form()">Register</button>
+            </li>
+            <li>
+                <br><br><a href="/portal">Already Registered! Login Now</a>
+            </li>
+        </ul>
+    </form>
+</div>
+</body>
+</html>

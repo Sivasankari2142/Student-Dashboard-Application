@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Student | Dashboard</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <style>
+    a{
+      color: white;
+    }
+    .navigation ul{
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #4B0082;
+    }
+    .wrapper .sidebar{
+      width: 110px;
+      height: 100%;
+      background: #4B0082;
+      padding: 30px 0px;
+      position: fixed;
+    }
+    th{
+      background-color:#4B0082;
+      height: 45px;
+      width: 300px;
+      color:white;
+      text-align: center;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+<div class="navigation">
+  <ul>
+    <li><a href="#">Student Dashboard</a> </li>
+    <li style="float:right"><a href="/logout">Logout</a></li>
+    <li style="float: right;color: white;font-size: 25px;"><h6>Hi <br>{{.}}</h6></li>
+  </ul>
+</div>
+<div class="wrapper">
+  <div class="sidebar">
+    <ul>
+      <li><a href="/home">Home</a></li>
+      <li><a href="/grades1">Grades</a></li>
+      <li><a href="/student-attendance">Attendance</a></li>
+    </ul>
+  </div>
+</div>
+<div class="dashboardSection" style="margin-right: 100px;margin-top: 50px;">
+  <section class="view gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-center align-items-center">
+    <span class="white-text mx-3" style="font-size: 30px;">Grade Report</span>
+  </section><br><br>
+  <table class="table table-striped table-bordered" style="width: 70%;align-content: center;margin-left: 200px;">
+    <thead>
+    <tr>
+      <th class="th-md">
+        <a href="">Student ID
+        </a>
+      </th>
+      <th class="th-md">
+        <a href="">Student Name
+        </a>
+      </th>
+      <th class="th-md">
+        <a href="">Date
+        </a>
+      </th>
+      <th class="th-md">
+        <a href="">Subject
+        </a>
+      </th>
+      <th class="th-md">
+        <a href="">Grade
+        </a>
+      </th>
+    </tr>
+    </thead>
+    <tbody id="att_Table">
+    </tbody>
+  </table>
+</div>
+</div>
+<script>
+  window.onload=tableSelect();
+  function tableSelect() {
+    var xhr = new XMLHttpRequest(),
+            method = 'GET',
+            overrideMimeType = 'application/json',
+            url = '/grade_students';
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        var student = JSON.parse(xhr.responseText);
+        var ele = document.getElementById('att_Table');
+        for (var i = 0; i < student.length; i++) {
+          var row = `<tr>
+                     <td>${student[i].stu_id}</td>
+                     <td>${student[i].student_name}</td>
+                     <td>${student[i].date}</td>
+                     <td>${student[i].subject}</td>
+                     <td>${student[i].grade}</td>
+                 </tr>`
+          ele.innerHTML += row
+        }
+      }
+    };
+    xhr.open(method, url, true);
+    xhr.send();
+  }
+</script>
+</body>
+</html>
+

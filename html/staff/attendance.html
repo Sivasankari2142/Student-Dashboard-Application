@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Faculty | Dashboard</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+        window.onload = populateSelect();
+        window.onload=tableSelect();
+        function populateSelect() {
+            var xhr = new XMLHttpRequest(),
+                method = 'GET',
+                overrideMimeType = 'application/json',
+                url = '/users';
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    var student = JSON.parse(xhr.responseText);
+                    var stu_id = document.getElementById('stu_id');
+                    for (var i = 0; i < student.length; i++) {
+                        var option = document.createElement("OPTION");
+                        option.innerHTML = student[i].ID +"-"+ student[i].firstname;
+                        option.value = student[i].ID;
+                        stu_id.options.add(option);
+                    }
+                }
+            };
+            xhr.open(method, url, true);
+            xhr.send();
+        }
+        function tableSelect() {
+            var xhr = new XMLHttpRequest(),
+                method = 'GET',
+                overrideMimeType = 'application/json',
+                url = '/att_users';
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    var student = JSON.parse(xhr.responseText);
+                    var ele = document.getElementById('att_Table');
+                    for (var i = 0; i < student.length; i++) {
+                        var row = `<tr>
+                     <td>${student[i].stu_id}</td>
+                     <td>${student[i].student_name}</td>
+                     <td>${student[i].date}</td>
+                     <td>${student[i].subject}</td>
+                     <td>${student[i].attended}</td>
+                 </tr>`
+                        ele.innerHTML += row
+                    }
+                }
+            };
+            xhr.open(method, url, true);
+            xhr.send();
+        }
+        function att_form()
+        {
+            var requestObject = {};
+            var s=document.getElementById("stu_id");
+            requestObject.stu_id=s.options[s.selectedIndex].value;
+            var s1=s.options[s.selectedIndex].text;
+            var arr=s1.split("-")
+            var stud_name=arr[1];
+            requestObject.student_name=stud_name;
+            requestObject.date=document.getElementById("date").value;
+            requestObject.subject=document.getElementById("subject").value;
+            var ele = document.getElementById("attended");
+            requestObject.attended=ele.options[ele.selectedIndex].value;
+            var xmlhttp = new XMLHttpRequest();
+            var theUrl = "/att";
+            xmlhttp.open("POST", theUrl);
+            xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xmlhttp.send(JSON.stringify(requestObject))
+            alert("Attendance Details Entered");
+            location.reload();
+        }
+    </script>
+    <style>
+        .navigation ul{
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #4B0082;
+        }
+        .wrapper .sidebar{
+            width: 110px;
+            height: 100%;
+            background: #4B0082;
+            padding: 30px 0px;
+            position: fixed;
+        }
+        #text{
+            position: absolute;
+            margin-top: 250px;
+            margin-left: 100px;
+            font-size: 15px;
+            color: black;
+            transform: translate(-50%,-50%);
+            -ms-transform: translate(-50%,-50%);left:25%;
+        }
+        a{
+            color: white;
+        }
+        .mysidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            margin-left: 100px;
+            right: 0;
+            background-color: white;
+            overflow-x: hidden;
+            transition: 0.5s;
+        }
+        th{
+            background-color:#4B0082;
+            height: 45px;
+            width: 300px;
+            color:white;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .mysidebar a {
+            text-decoration: none;
+            font-size: 25px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+            text-align: center;
+        }
+        .mysidebar a:hover {
+            color: #f1f1f1;
+        }
+        .mysidebar .closebtn {
+            position: absolute;
+            color: black;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            float: right;
+            background-color: white;
+            color: #4B0082;
+            padding: 10px 15px;
+            border: 2px solid #4B0082;
+        }
+        .openbtn:hover {
+            background-color: white;
+        }
+        #main {
+            transition: margin-left .5s;
+            padding: 16px;
+        }
+        @media screen and (max-height: 450px) {
+            .sidebar {padding-top: 15px;}
+            .sidebar a {font-size: 18px;}
+        }
+        #thead>tr>th{ color: white; }
+    </style>
+</head>
+<body>
+<div class="navigation">
+    <ul>
+        <li><a href="#">Staff Dashboard</a> </li>
+        <li style="float:right"><a href="/logout">Logout</a></li>
+        <li style="float: right;color: white;font-size: 20px;"><h6>Hi <br>{{.}}</h6></li>
+    </ul>
+</div>
+<div class="wrapper">
+    <div class="sidebar">
+        <ul>
+            <li><a href="/staff-home">Home</a></li>
+            <li><a href="/grades">Grades</a></li>
+            <li><a href="/attendance">Attendance</a></li>
+        </ul>
+    </div>
+</div>
+<div class="dashboardSection" style="margin-top: 30px;">
+            <div class="row1">
+                <span class="white-text mx-7" style="font-size: 30px;align-content: center;">Attendance Report</span>
+                <span class="mx-3"><button type="button" class="openbtn" onclick="openNav()"><span style="font-size: 20px;">&#43;</span>Attendance</button></span>
+            </div><br><br>
+                    <table class="table table-striped table-bordered" style="width: 70%;align-content: center;margin-left: 200px;">
+                        <thead>
+                        <tr>
+                            <th>
+                                <a href="">Student ID
+                                </a>
+                            </th>
+                            <th>
+                                <a href="">Student Name
+                                </a>
+                            </th>
+                            <th>
+                                <a href="">Date
+                                </a>
+                            </th>
+                            <th>
+                                <a href="">Subject
+                                </a>
+                            </th>
+                            <th>
+                                <a href="">Attended
+                                </a>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody id="att_Table">
+                        </tbody>
+                    </table>
+</div>
+<div id="mySidebar" class="mysidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <div id="text">
+        <form method="POST">
+            <h6 style="font-size: 30px;">Attendance Details</h6><br><br>
+               <ul id="no-Bullets">
+                       <div class="myDiv">
+                           <label style="float: left;">Student ID & Name </label>
+                           <select id="stu_id" name="stu_id" style="float: right;width: 50%;">
+                               <option value="">-- Select --</option>
+                           </select>
+                       </div><br><br>
+                <div class="myDiv">
+                    <label for="date" style="float: left;">Date</label>
+                    <input type="date" style="float: right;width: 50%;" class="inputFields" id="date" name="date" value=""  required/>
+                </div><br><br>
+                <div class="myDiv">
+                    <label for="subject" style="float: left;">Subject</label>
+                    <input type="text" style="float: right;width: 50%;" class="inputFields" id="subject" name="subject" value=""  required/>
+                </div><br><br>
+                <div class="myDiv">
+                    <label style="float: left;">Attended or Not:</label>
+                    <select id="attended" name="attended" style="float: right;width: 50%;">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div><br><br>
+                <div class="myDiv" id="center-btn">
+                    <button id="join-btn1" style="width: 50%;float:right;" type="button" onclick="att_form()">Submit</button>
+                </div>
+                <br>
+            </ul>
+        </form>
+    </div>
+</div>
+<script>
+    function openNav() {
+        document.getElementById("mySidebar").style.width = "550px";
+        document.getElementById("main").style.marginRight = "50px";
+    }
+    function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("main").style.marginRight= "0";
+    }
+    </script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
+
